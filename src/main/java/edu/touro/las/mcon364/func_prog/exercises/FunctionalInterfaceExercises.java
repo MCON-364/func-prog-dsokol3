@@ -1,6 +1,7 @@
 package edu.touro.las.mcon364.func_prog.exercises;
 
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjuster;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -39,8 +40,9 @@ public class FunctionalInterfaceExercises {
      *
      */
     public static Supplier<Integer> currentYearSupplier() {
-      // TODO
-        return null;
+        Supplier<String> dateSupplier = () -> LocalDate.now().getYear()+"";
+        return () -> Integer.parseInt(dateSupplier.get());
+
     }
 
     /**
@@ -48,8 +50,8 @@ public class FunctionalInterfaceExercises {
      * between 1 and 100.
      */
     public static Supplier<Integer> randomScoreSupplier() {
-        // TODO
-        return null;
+        Supplier<Integer> randomNumberSupplier = () -> (int) (Math.random()*100);
+        return randomNumberSupplier;
     }
 
     // =========================================================
@@ -61,8 +63,8 @@ public class FunctionalInterfaceExercises {
      * a string is all uppercase.
      */
     public static Predicate<String> isAllUpperCase() {
-        // TODO
-        return null;
+        Predicate<String> isAllUpperCase = s -> s.equals(s.toUpperCase());
+        return isAllUpperCase;
     }
 
     /**
@@ -72,8 +74,7 @@ public class FunctionalInterfaceExercises {
      * Hint: consider chaining.
      */
     public static Predicate<Integer> positiveAndDivisibleByFive() {
-        // TODO
-        return null;
+        return num -> (num % 2 == 0 && num % 5 == 0);
     }
 
     // =========================================================
@@ -87,8 +88,7 @@ public class FunctionalInterfaceExercises {
      * Formula: F = C * 9/5 + 32
      */
     public static Function<Double, Double> celsiusToFahrenheit() {
-        // TODO
-        return null;
+        return c -> c * 9/5 + 32;
     }
 
     /**
@@ -98,8 +98,12 @@ public class FunctionalInterfaceExercises {
      * Bonus: Make it case-insensitive.
      */
     public static Function<String, Integer> countVowels() {
-        // TODO
-        return null;
+        String vowels = "aeiou";
+        Function<String, Integer> countFunction = s -> s.toCharArray();
+        for (char c : vowels.toCharArray()) {
+
+        }
+
     }
 
     // =========================================================
