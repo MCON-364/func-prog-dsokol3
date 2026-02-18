@@ -99,11 +99,20 @@ public class FunctionalInterfaceExercises {
      */
     public static Function<String, Integer> countVowels() {
         String vowels = "aeiou";
-        Function<String, Integer> countFunction = s -> s.toCharArray();
-        for (char c : vowels.toCharArray()) {
 
-        }
+        Function<String, Integer> countFunction = s -> {
+            int count = 0;
+            s = s.toLowerCase();
 
+            for (char c : s.toCharArray()) {
+                if (vowels.indexOf(c) != -1) {
+                    count++;
+                }
+            }
+            return count;
+        };
+
+        return countFunction;
     }
 
     // =========================================================
@@ -118,7 +127,7 @@ public class FunctionalInterfaceExercises {
      * *** Hello ***
      */
     public static Consumer<String> starPrinter() {
-        // TODO
+        Consumer<String> starPrinter = s -> System.out.println("*** " + s + " ***");
         return null;
     }
 
@@ -127,7 +136,7 @@ public class FunctionalInterfaceExercises {
      * of an integer.
      */
     public static Consumer<Integer> printSquare() {
-        // TODO
+        Consumer<Integer> squarePrinter = num -> System.out.println(num * num);
         return null;
     }
 
@@ -147,7 +156,11 @@ public class FunctionalInterfaceExercises {
      *  - Print them
      */
     public static void processStrings(List<String> values) {
-        // TODO
+        Predicate<String> isLongerThan3 = s -> s.length() > 3;
+        Function<String, String> toLowerCase = s -> s.toLowerCase();
+        Consumer<String> print = s -> System.out.println(s);
+
+
     }
 
     /**
@@ -160,6 +173,8 @@ public class FunctionalInterfaceExercises {
      * Print only those above 70.
      */
     public static void generateAndFilterScores() {
-        // TODO
+        Supplier<Integer> randomScoreSupplier = randomScoreSupplier();
+        Predicate<Integer> above70 = num -> num > 70;
+        Consumer<Integer> print = num -> System.out.println(num);
     }
 }
