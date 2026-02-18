@@ -50,7 +50,7 @@ public class FunctionalInterfaceExercises {
      * between 1 and 100.
      */
     public static Supplier<Integer> randomScoreSupplier() {
-        Supplier<Integer> randomNumberSupplier = () -> (int) (Math.random()*100);
+        Supplier<Integer> randomNumberSupplier = () -> (int) (Math.random()*100) + 1;
         return randomNumberSupplier;
     }
 
@@ -74,7 +74,7 @@ public class FunctionalInterfaceExercises {
      * Hint: consider chaining.
      */
     public static Predicate<Integer> positiveAndDivisibleByFive() {
-        return num -> (num % 2 == 0 && num % 5 == 0);
+        return num -> (num > 0 && num % 5 == 0);
     }
 
     // =========================================================
@@ -128,7 +128,7 @@ public class FunctionalInterfaceExercises {
      */
     public static Consumer<String> starPrinter() {
         Consumer<String> starPrinter = s -> System.out.println("*** " + s + " ***");
-        return null;
+        return starPrinter;
     }
 
     /**
@@ -137,7 +137,7 @@ public class FunctionalInterfaceExercises {
      */
     public static Consumer<Integer> printSquare() {
         Consumer<Integer> squarePrinter = num -> System.out.println(num * num);
-        return null;
+        return squarePrinter;
     }
 
     // =========================================================
@@ -160,7 +160,10 @@ public class FunctionalInterfaceExercises {
         Function<String, String> toLowerCase = s -> s.toLowerCase();
         Consumer<String> print = s -> System.out.println(s);
 
-
+        values.stream()
+                .filter(isLongerThan3)
+                .map(toLowerCase)
+                .forEach(print);
     }
 
     /**
@@ -176,5 +179,12 @@ public class FunctionalInterfaceExercises {
         Supplier<Integer> randomScoreSupplier = randomScoreSupplier();
         Predicate<Integer> above70 = num -> num > 70;
         Consumer<Integer> print = num -> System.out.println(num);
+
+        for (int i = 0; i < 5; i++) {
+            int score = randomScoreSupplier.get();
+            if (above70.test(score)) {
+                print.accept(score);
+            }
+        }
     }
 }
