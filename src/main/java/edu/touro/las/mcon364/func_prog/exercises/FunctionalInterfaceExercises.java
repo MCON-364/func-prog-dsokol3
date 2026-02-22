@@ -1,6 +1,7 @@
 package edu.touro.las.mcon364.func_prog.exercises;
 
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjuster;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -39,8 +40,9 @@ public class FunctionalInterfaceExercises {
      *
      */
     public static Supplier<Integer> currentYearSupplier() {
-      // TODO
-        return null;
+        Supplier<String> dateSupplier = () -> LocalDate.now().getYear()+"";
+        return () -> Integer.parseInt(dateSupplier.get());
+
     }
 
     /**
@@ -48,8 +50,8 @@ public class FunctionalInterfaceExercises {
      * between 1 and 100.
      */
     public static Supplier<Integer> randomScoreSupplier() {
-        // TODO
-        return null;
+        Supplier<Integer> randomNumberSupplier = () -> (int) (Math.random()*100) + 1;
+        return randomNumberSupplier;
     }
 
     // =========================================================
@@ -61,8 +63,8 @@ public class FunctionalInterfaceExercises {
      * a string is all uppercase.
      */
     public static Predicate<String> isAllUpperCase() {
-        // TODO
-        return null;
+        Predicate<String> isAllUpperCase = s -> s.equals(s.toUpperCase());
+        return isAllUpperCase;
     }
 
     /**
@@ -72,8 +74,7 @@ public class FunctionalInterfaceExercises {
      * Hint: consider chaining.
      */
     public static Predicate<Integer> positiveAndDivisibleByFive() {
-        // TODO
-        return null;
+        return num -> (num > 0 && num % 5 == 0);
     }
 
     // =========================================================
@@ -87,8 +88,7 @@ public class FunctionalInterfaceExercises {
      * Formula: F = C * 9/5 + 32
      */
     public static Function<Double, Double> celsiusToFahrenheit() {
-        // TODO
-        return null;
+        return c -> c * 9/5 + 32;
     }
 
     /**
@@ -98,8 +98,21 @@ public class FunctionalInterfaceExercises {
      * Bonus: Make it case-insensitive.
      */
     public static Function<String, Integer> countVowels() {
-        // TODO
-        return null;
+        String vowels = "aeiou";
+
+        Function<String, Integer> countFunction = s -> {
+            int count = 0;
+            s = s.toLowerCase();
+
+            for (char c : s.toCharArray()) {
+                if (vowels.indexOf(c) != -1) {
+                    count++;
+                }
+            }
+            return count;
+        };
+
+        return countFunction;
     }
 
     // =========================================================
@@ -114,8 +127,8 @@ public class FunctionalInterfaceExercises {
      * *** Hello ***
      */
     public static Consumer<String> starPrinter() {
-        // TODO
-        return null;
+        Consumer<String> starPrinter = s -> System.out.println("*** " + s + " ***");
+        return starPrinter;
     }
 
     /**
@@ -123,8 +136,8 @@ public class FunctionalInterfaceExercises {
      * of an integer.
      */
     public static Consumer<Integer> printSquare() {
-        // TODO
-        return null;
+        Consumer<Integer> squarePrinter = num -> System.out.println(num * num);
+        return squarePrinter;
     }
 
     // =========================================================
@@ -143,7 +156,14 @@ public class FunctionalInterfaceExercises {
      *  - Print them
      */
     public static void processStrings(List<String> values) {
-        // TODO
+        Predicate<String> isLongerThan3 = s -> s.length() > 3;
+        Function<String, String> toLowerCase = s -> s.toLowerCase();
+        Consumer<String> print = s -> System.out.println(s);
+
+        values.stream()
+                .filter(isLongerThan3)
+                .map(toLowerCase)
+                .forEach(print);
     }
 
     /**
@@ -156,6 +176,15 @@ public class FunctionalInterfaceExercises {
      * Print only those above 70.
      */
     public static void generateAndFilterScores() {
-        // TODO
+        Supplier<Integer> randomScoreSupplier = randomScoreSupplier();
+        Predicate<Integer> above70 = num -> num > 70;
+        Consumer<Integer> print = num -> System.out.println(num);
+
+        for (int i = 0; i < 5; i++) {
+            int score = randomScoreSupplier.get();
+            if (above70.test(score)) {
+                print.accept(score);
+            }
+        }
     }
 }

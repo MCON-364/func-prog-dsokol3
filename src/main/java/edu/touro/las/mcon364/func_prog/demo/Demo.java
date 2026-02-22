@@ -115,7 +115,6 @@ public class Demo {
         Function<String, Integer> lengthFunction = s -> s.length();
         System.out.println(lengthFunction.apply("Hello"));
     }
-
     public void demoFunctionWithAndThen() {
         /**
          * The andThen method is a default method in the Function interface that returns a composed function that first applies this function to its input, and then applies the after function to the result.
