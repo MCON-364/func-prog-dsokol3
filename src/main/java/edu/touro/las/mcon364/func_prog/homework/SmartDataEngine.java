@@ -1,27 +1,28 @@
 package edu.touro.las.mcon364.func_prog.homework;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.*;
 
 /**
  * ============================================================
- *  Smart Data Processing Engine
+ * Smart Data Processing Engine
  * ============================================================
  *
  * Goal:
- *  - Build a reusable functional pipeline engine
- *  - Use Consumer, Supplier, Predicate, Function
- *  - Use Optional
- *  - Use chaining
- *  - Use switch expression
+ * - Build a reusable functional pipeline engine
+ * - Use Consumer, Supplier, Predicate, Function
+ * - Use Optional
+ * - Use chaining
+ * - Use switch expression
  *
  * Estimated time: ~2 hours
  *
  * Rules:
- *  - Use lambdas (no anonymous classes)
- *  - Use Optional where requested
- *  - Use functional interface chaining where appropriate
+ * - Use lambdas (no anonymous classes)
+ * - Use Optional where requested
+ * - Use functional interface chaining where appropriate
  */
 public class SmartDataEngine {
 
@@ -34,17 +35,25 @@ public class SmartDataEngine {
      * Implement a generic pipeline.
      *
      * Behavior:
-     *  1. Filter using Predicate
-     *  2. Transform using Function
-     *  3. Pass result to Consumer
+     * 1. Filter using Predicate
+     * 2. Transform using Function
+     * 3. Pass result to Consumer
      */
     public static <T, R> void pipeline(
             List<T> input,
             Predicate<T> filter,
             Function<T, R> mapper,
-            Consumer<R> consumer
-    ) {
-        // TODO
+            Consumer<R> consumer) {
+
+        for (int i = 0; i < input.size(); i++) {
+            T item = input.get(i);
+
+            if (filter.test(item)) {
+                R result = mapper.apply(item);
+                consumer.accept(result);
+            }
+        }
+
     }
 
     // ============================================================
@@ -60,26 +69,29 @@ public class SmartDataEngine {
      */
     public static Optional<Double> safeDivide(double a, double b) {
         // TODO
-        return Optional.empty();
+        if (b != 0)
+            return Optional.of(a / b);
+        else
+            return Optional.empty();
     }
 
     /**
      * TODO:
      * Use Optional chaining:
      *
-     *  - Divide two numbers using safeDivide(...)
-     *  - If a value is present, multiply the result by 10
-     *  - If empty, return -1.0
+     * - Divide two numbers using safeDivide(...)
+     * - If a value is present, multiply the result by 10
+     * - If empty, return -1.0
      *
      * Reminder:
-     *  - Optional.map(...) transforms the value ONLY if it is present.
-     *  - If the Optional is empty, map() does nothing and the empty
-     *    Optional continues down the chain.
-     *  - Use orElse(...) to provide a default value when empty.
+     * - Optional.map(...) transforms the value ONLY if it is present.
+     * - If the Optional is empty, map() does nothing and the empty
+     * Optional continues down the chain.
+     * - Use orElse(...) to provide a default value when empty.
      */
     public static double processDivision(double a, double b) {
         // TODO
-        return 0;
+        return safeDivide(a, b).map(x -> x * 10).orElse(-1.0);
     }
 
     // ============================================================
@@ -91,10 +103,10 @@ public class SmartDataEngine {
      * Use switch expression with pattern matching.
      *
      * Behavior:
-     *  - If Integer → return square
-     *  - If String → return uppercase
-     *  - If Double → return rounded value
-     *  - Otherwise → return "Unsupported"
+     * - If Integer → return square
+     * - If String → return uppercase
+     * - If Double → return rounded value
+     * - Otherwise → return "Unsupported"
      *
      * Must use switch expression (arrow syntax).
      */
@@ -102,14 +114,12 @@ public class SmartDataEngine {
 
         // Example structure (not solution):
 
-        // return switch (input) {
-        //     case Integer i -> ...
-        //     case String s  -> ...
-        //     case Double d  -> ...
-        //     default -> ...
-        // };
-
-        return null;
+        return switch (input) {
+            case Integer i -> i * i;
+            case String s -> s.toUpperCase();
+            case Double d -> Math.round(d);
+            default -> "Unsupported";
+        };
     }
 
     // ============================================================
@@ -121,65 +131,68 @@ public class SmartDataEngine {
      * Create and return a Function<String, Integer>
      * that performs the following transformations in order:
      *
-     *   1. Trim leading and trailing whitespace
-     *   2. Convert the string to lowercase
-     *   3. Return the length of the final string
+     * 1. Trim leading and trailing whitespace
+     * 2. Convert the string to lowercase
+     * 3. Return the length of the final string
      *
      * Guidance:
-     *   - You should NOT write one large lambda block.
-     *   - Instead, create smaller Function variables
-     *     and combine them using function chaining.
+     * - You should NOT write one large lambda block.
+     * - Instead, create smaller Function variables
+     * and combine them using function chaining.
      *
-     *   - Use:
-     *         andThen(...)  → left function runs first
-     *         compose(...)  → right function runs first
+     * - Use:
+     * andThen(...) → left function runs first
+     * compose(...) → right function runs first
      *
-     *   - Think carefully about types:
-     *       trim:        String → String
-     *       toLowerCase: String → String
-     *       length:      String → Integer
+     * - Think carefully about types:
+     * trim: String → String
+     * toLowerCase: String → String
+     * length: String → Integer
      *
-     *   - The final returned function must be:
-     *       Function<String, Integer>
+     * - The final returned function must be:
+     * Function<String, Integer>
      *
      * This exercise reinforces how data flows through a functional pipeline.
      */
 
     public static Function<String, Integer> buildStringLengthPipeline() {
-        // TODO
-        return null;
+        Function<String, String> trim = s -> s.trim();
+        Function<String, String> toLowerCase = s -> s.toLowerCase();
+        Function<String, Integer> length = s -> s.length();
+        Function<String, Integer> finalAns = trim.andThen(toLowerCase).andThen(length);
+        return finalAns;
     }
 
     // ============================================================
     // PART 5 — MINI APPLICATION
     // ============================================================
 
-   /**
+    /**
      * TODO:
      * Implement this method using ALL four functional interfaces:
      *
-     *  - Supplier  → generate random integers
-     *  - Predicate → filter numbers > 50
-     *  - Function  → convert Integer → "Score: X"
-     *  - Consumer  → print the final result
+     * - Supplier → generate random integers
+     * - Predicate → filter numbers > 50
+     * - Function → convert Integer → "Score: X"
+     * - Consumer → print the final result
      *
      * Required Behavior:
-     *  1. Generate 10 random integers between 1 and 100.
-     *     (Call supplier.get() multiple times.)
-     *  2. Keep only numbers greater than 50.
-     *  3. Convert each remaining number into a formatted string.
-     *  4. Print each formatted string.
+     * 1. Generate 10 random integers between 1 and 100.
+     * (Call supplier.get() multiple times.)
+     * 2. Keep only numbers greater than 50.
+     * 3. Convert each remaining number into a formatted string.
+     * 4. Print each formatted string.
      *
      * Important Guidance:
-     *  - Do NOT use Streams.
-     *  - Do NOT hardcode logic directly inside the loop.
-     *  - First define the functional interfaces.
-     *  - Then generate a List<Integer>.
-     *  - Then pass everything into your pipeline() method.
+     * - Do NOT use Streams.
+     * - Do NOT hardcode logic directly inside the loop.
+     * - First define the functional interfaces.
+     * - Then generate a List<Integer>.
+     * - Then pass everything into your pipeline() method.
      *
      * Think in terms of behavior injection:
-     *  - The pipeline should NOT know how random numbers are created.
-     *  - The pipeline should NOT know how formatting works.
+     * - The pipeline should NOT know how random numbers are created.
+     * - The pipeline should NOT know how formatting works.
      *
      * It should only orchestrate the behavior passed to it.
      *
@@ -187,7 +200,19 @@ public class SmartDataEngine {
      */
 
     public static void runScoreProcessor() {
-        // TODO
+        Supplier<Integer> randomNum = () -> (int) (Math.random() * 100) + 1;
+        Predicate<Integer> filter = num -> num > 50;
+        Function<Integer, String> format = num -> "Score: " + num;
+        Consumer<String> print = System.out::println;
+
+        ArrayList<Integer> list = new ArrayList<>();
+        int num = 0;
+        for (int i = 0; i < 10; i++) {
+            num = randomNum.get();
+            list.add(num);
+        }
+
+        pipeline(list, filter, format, print);
     }
 
 }
